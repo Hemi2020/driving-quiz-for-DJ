@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virginia Driving Test Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .options {
+            margin: 15px 0;
+        }
+        .option {
+            display: block;
+            margin: 10px;
+        }
+        #submit {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz"></div>
+        <button id="submit">Submit Quiz</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What should you always do to protect your life behind the wheel?",
+                options: ["Drive faster", "Always wear your seatbelt", "Use your phone", "Ignore speed limits"],
+                correct: 1
+            },
+            {
+                question: "What is Virginia's law regarding drinking and driving?",
+                options: ["There is no penalty", "Drunk driving is allowed after midnight", "It has zero-tolerance for underage drinking and driving", "You can drive with one drink"],
+                correct: 2
+            },
+            {
+                question: "Which hand position should you use while driving?",
+                options: ["8 o'clock and 4 o'clock", "10 o'clock and 2 o'clock", "6 o'clock and 12 o'clock", "3 o'clock and 9 o'clock"],
+                correct: 0
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit');
+        const resultsContainer = document.getElementById('results');
+
+        function buildQuiz() {
+            const output = [];
+
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const options = [];
+
+                currentQuestion.options.forEach((option, index) => {
+                    options.push(
+                        `<label>
+                            <input type="radio" name="question${questionNumber}" value="${index}">
+                            ${option}
+                        </label>`
+                    );
+                });
+
+                output.push(
+                    `<div class="question"> ${currentQuestion.question} </div>
+                    <div class="options"> ${options.join('')} </div>`
+                );
+            });
+
+            quizContainer.innerHTML = output.join('');
+        }
+
+        function showResults() {
+            let numCorrect = 0;
+
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const selector = `input[name=question${questionNumber}]:checked`;
+                const userAnswer = (document.querySelector(selector) || {}).value;
+
+                if (userAnswer == currentQuestion.correct) {
+                    numCorrect++;
+                }
+            });
+
+            resultsContainer.innerHTML = `You got ${numCorrect} out of ${quizData.length} questions correct.`;
+        }
+
+        buildQuiz();
+
+        submitButton.addEventListener('click', showResults);
+    </script>
+</body>
+</html>
